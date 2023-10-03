@@ -44,22 +44,25 @@ def save_mel(file_path, file_output):
     plt.savefig(file_output)
 
 
-def save_file(file_path, dir):
+def save_file(file_path, output_dir, files_set):
     if '.wav' in file_path.name:
-        file_output = dir / (file_path.stem + '.jpg')
-        if not file_output.exists():
+        file_output = output_dir / (file_path.stem + '.jpg')
+        if not file_output in files_set:
             save_mel(file_path=file_path, file_output=file_output)
 
 
-def process_files(input, output, ls=500, pool_num=10):
-    ls = 500 # list size
+def process_files(input, output, files_set, ls=500, pool_num=10):
+    ls = 500 # list size``
     lf = list(input.iterdir()) # list of files
     for x in range(0, len(lf), ls):
         p = Pool(pool_num)
-        p.map(partial(save_file, dir=output), lf[x:x+ls])
+        p.map(partial(save_file, output_dir=output, files_set=files_set), lf[x:x+ls])
         print(x, x+ls)
 
 if __name__ == '__main__':
     
-    process_files(train_dir, train_mels_dir)
-    process_files(test_dir, test_mels_dir)
+    set_train_mels = set([f for f in train_mels_dir.iterdir()])
+    set_test_mels = set([f for f in test_mels_dir.iterdir()])
+    
+    process_files(train_dir, train_mels_dir, set_train_mels)
+    process_files(test_dir, test_mels_dir, set_test_mels)

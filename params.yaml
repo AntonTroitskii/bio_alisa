@@ -1,0 +1,14 @@
+data:
+  root: "D:/data//bio02"
+  # *.zip -> train -> train_mels
+  # TRAIN
+  train_zip: "D:/data//bio02/train.zip"
+  train_dir: "D:/data//bio02/train"
+  train_mels: "D:/data//bio02/train_mels"
+  # TEST
+  test_zip: "D:/data//bio02/test.zip"
+  test_dir: "D:/data//bio02/test"
+  test_mels: "D:/data//bio02/test_mels"
+  # MODELS
+  model: model.pickle
+  models: model_resnet18_fas.pkl
