@@ -1,14 +1,40 @@
+base:
+  seed: 42
+  log_level: INFO
+
 data:
   root: "D:/data//bio02"
-  # *.zip -> train -> train_mels
-  # TRAIN
-  train_zip: "D:/data//bio02/train.zip"
-  train_dir: "D:/data//bio02/train"
-  train_mels: "D:/data//bio02/train_mels"
-  # TEST
-  test_zip: "D:/data//bio02/test.zip"
-  test_dir: "D:/data//bio02/test"
-  test_mels: "D:/data//bio02/test_mels"
-  # MODELS
-  model: model.pickle
-  models: model_resnet18_fas.pkl
+  train_link: "https://disk.yandex.ru/d/IUUTPJFOfwn_OQ"
+  test_link: "https://disk.yandex.ru/d/K8Z-gQbspmxkhw"
+  # train.zip -> ttrain_mels
+  
+  # ZIP
+  zip_folder: "data/zip"
+  train_zip: "data/zip/train.zip"
+  test_zip: "data/zip/test.zip"
+  
+  # UNPACKED
+  train_target: "data/labels/targets.tsv"
+  train_col_name: "name"
+  train_col_label: "label"
+  # unzip_dir: "data/unzip"
+  # train_dir: "data/unzip/train/"
+  # test_dir: "data/unzip/test"
+  
+  # MELS
+  train_mels: "data/prepared/train_mels"
+  test_mels: "data/prepared/test_mels"
+  
+  # Data preparation
+  size: 100
+  valid_pct: 0.2
+  shuffle_data: True
+  if_all_images: false
+
+train:
+  fine_tune_step: 10
+  nn: resnet18
+  # nn: [resnet18, resnet34, resnet50, resnet101, resnet152]
+  # nn: [resnet18, resnet34, resnet50]
+  model: models/model.pkl
+
