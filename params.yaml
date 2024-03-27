@@ -20,6 +20,7 @@ data:
   train_target: "data/labels/targets.tsv"
   train_col_name: "name"
   train_col_label: "label"
+  num_pools: 20
   # unzip_dir: "data/unzip"
   # train_dir: "data/unzip/train/"
   # test_dir: "data/unzip/test"

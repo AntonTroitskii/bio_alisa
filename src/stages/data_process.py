@@ -10,7 +10,7 @@ import librosa
 import zipfile
 from pathlib import Path
 from zipfile import ZipFile
-from src.utils.files import make_folder, extract_file_from_zip
+from src.utils.files import make_folder, extract_file_from_zip, delete_folder
 from src.utils.logs import get_logger
 import logging
 import sys
@@ -49,7 +49,6 @@ def process_files_in_dir(input_dir: Path, output_path: Path,
         p = Pool(pool_num)
         p.map(partial(process_save_file, output_dir=output_path,
               files_set=files_set), lf[x:x+ls])
-        print(x, x+ls)
 
 
 def process_byte_file(file_path, file_output):
@@ -123,26 +122,20 @@ def process_zip_file(zip_path: Path, output_dir: Path, logger: logging.Logger, l
                             logger=logger, files_batch=files_batch, pool_num=pool_num, ls=ls)
 
     else:
-        files_0, files_1 = get_labeld_files(zip_path=zip_file, file_name=labels_file_name,
+        files_0, files_1 = get_labeld_files(zip_path=zip_path, file_name=labels_file_name,
                                             parent_path="train/", stem='.wav')
 
         files_batch_0 = get_files_batch(files=files_0, ls=ls)
-        process_batch_files(zip_path=zip_path, output_dir=output_dir / "0",
+        output_dir_0 = output_dir / "0"
+        make_folder(output_dir_0)
+        process_batch_files(zip_path=zip_path, output_dir=output_dir_0,
                             logger=logger, files_batch=files_batch_0, pool_num=pool_num, ls=ls)
 
         files_batch_1 = get_files_batch(files=files_1, ls=ls)
-        process_batch_files(zip_path=zip_path, output_dir=output_dir / "1",
+        output_dir_1 = output_dir / "1"
+        make_folder(output_dir_1)
+        process_batch_files(zip_path=zip_path, output_dir=output_dir_1,
                             logger=logger, files_batch=files_batch_1, pool_num=pool_num, ls=ls)
-
-    # p = Pool(pool_num)
-    # count_files = 0
-    # for bi in range(0, len(files_batch), pool_num):
-    #     p.map(partial(process_zip_batch, zip_path=zip_path,
-    #                   output_dir=output_dir), files_batch[bi: bi+pool_num])
-
-    #     count_files += sum([len(batch)
-    #                        for batch in files_batch[bi: bi+pool_num]])
-    #     logger.info('{} file(s) processed'.format(count_files))
 
 
 def process_data_files():
@@ -150,36 +143,32 @@ def process_data_files():
     with open('params.yaml') as file:
         params = yaml.safe_load(file)
 
-    num_pool = 2
+    num_pools = params['data']['num_pools']
+    train_zip = Path(params['data']['train_zip'])
+    test_zip = Path(params['data']['test_zip'])
+    output_dir = Path(params['data']['labels_folder'])
+    label_file_name = params['data']['zip_label_name']
+    train_mels_dir = Path(params['data']['train_mels'])
+    test_mels_dir = Path(params['data']['test_mels'])
 
     logger = get_logger("DATA PROCESS", log_level=params['base']['log_level'])
 
-    train_zip = Path(params['data']['train_zip'])
-
-    output_dir = Path(params['data']['labels_folder'])
-    file_name = params['data']['zip_label_name']
-
     make_folder(output_dir)
     extract_file_from_zip(zip_path=train_zip,
-                          file_name=file_name,
+                          file_name=label_file_name,
                           output_dir=output_dir)
-
-    test_zip = Path(params['data']['test_zip'])
-
-    train_mels_dir = Path(params['data']['train_mels'])
-    test_mels_dir = Path(params['data']['test_mels'])
 
     logger.info('Create train mels directory.')
     make_folder(train_mels_dir)
     logger.info('Start process of {}'.format(train_zip))
-    process_zip_file(train_zip, train_mels_dir,
-                     logger=logger, pool_num=num_pool)
+    process_zip_file(train_zip, train_mels_dir, labels_file_name=label_file_name,
+                     logger=logger, pool_num=num_pools)
 
     logger.info('Create test mels directory.')
     make_folder(test_mels_dir)
     logger.info('Start process of {}'.format(test_zip))
     process_zip_file(test_zip, test_mels_dir,
-                     logger=logger, pool_num=num_pool)
+                     logger=logger, pool_num=num_pools)
 
     # DEBUG
     # zip_path = Path('./data/train_test.zip')

@@ -1,0 +1,22 @@
+schema: '2.0'
+stages:
+  data_load:
+    cmd: python src/stages/data_load.py
+    deps:
+    - path: src/stages/data_load.py
+      hash: md5
+      md5: 1627b67e34bfd713ca4a109c9e98940e
+      size: 1206
+  data_transform:
+    cmd: python src/stages/data_process.py
+    deps:
+    - path: src/stages/data_process.py
+      hash: md5
+      md5: d7a3b0d82a54176b9b2713811d08f55f
+      size: 6727
+    outs:
+    - path: data/prepared
+      hash: md5
+      md5: 0eb36583b1828415d77e844c4e568efe.dir
+      size: 429822574
+      nfiles: 17349

@@ -10,7 +10,7 @@ def load_zip_data(params):
     Each file has its own progress bar.
     """
     # loop = asyncio.get_running_loop()
-
+    make_folder(Path((params['data']['zip_folder'])))
     urls = [
         (params['data']['train_link'], params['data']['train_zip']),
         (params['data']['test_link'], params['data']['test_zip'])
