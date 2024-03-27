@@ -12,8 +12,11 @@ data:
   zip_folder: "data/zip"
   train_zip: "data/zip/train.zip"
   test_zip: "data/zip/test.zip"
+  zip_label_name: "train/targets.tsv"
+
   
   # UNPACKED
+  labels_folder: "data/labels"
   train_target: "data/labels/targets.tsv"
   train_col_name: "name"
   train_col_label: "label"
@@ -37,4 +40,3 @@ train:
   # nn: [resnet18, resnet34, resnet50, resnet101, resnet152]
   # nn: [resnet18, resnet34, resnet50]
   model: models/model.pkl
-

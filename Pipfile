@@ -9,6 +9,10 @@ ipykernel = "*"
 requests = "*"
 pip = "*"
 mpegcoder = "*"
+librosa = "*"
+matplotlib = "*"
+pyyaml = "*"
+dvc = "*"
 
 [dev-packages]
 

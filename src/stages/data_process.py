@@ -1,19 +1,19 @@
-from pathlib import Path
-import zipfile
-import librosa
-import librosa.display
-import io
-import soundfile
-import numpy as np
-import matplotlib.pyplot as plt
-import yaml
-from multiprocessing import Pool
 from functools import partial
-
-from zipfile import ZipFile, ZipExtFile, ZipInfo
-from src.utils.files import make_folder
+from multiprocessing import Pool
+import yaml
+import matplotlib.pyplot as plt
+import numpy as np
+import soundfile
+import io
+import librosa.display
+import librosa
+import zipfile
+from pathlib import Path
+from zipfile import ZipFile
+from src.utils.files import make_folder, extract_file_from_zip
 from src.utils.logs import get_logger
 import logging
+import sys
 
 
 def y_sr_process_save(file_output, y, sr):
@@ -71,20 +71,31 @@ def process_zip_batch(files: list[str], zip_path: Path, output_dir: Path):
                 process_byte_file(wav_file, file_path)
 
 
-def process_zip_file(zip_path: Path, output_dir: Path, logger: logging.Logger, ls=500, pool_num=10):
+def get_labeld_files(zip_path, file_name, stem='.wav', parent_path='train/'):
+    files_0 = []
+    files_1 = []
     with ZipFile(zip_path) as zip_file:
-        files = zip_file.namelist()
+        with zip_file.open(file_name) as file:
+            for line in file.readlines():
+                name, label = line.split()
+                name = name.decode('utf-8')
+                label = int(label.decode('utf-8'))
+                path = parent_path + name + stem
 
-    wav_files = [file_name for file_name in files if '.wav' in file_name]
-    logger.info('There are {} file(s)'.format(len(wav_files)))
+                if label == 0:
+                    files_0.append(path)
+                elif label == 1:
+                    files_1.append(path)
 
-    ls = len(wav_files) // pool_num
-    if ls > 50:
-        ls = 20
+    return files_0, files_1
 
+
+def get_files_batch(files, ls):
+    return [files[x: x+ls] for x in range(0, len(files), ls)]
+
+
+def process_batch_files(zip_path: Path, output_dir: Path, logger: logging.Logger, files_batch: list[list[str]], pool_num: int, ls: int):
     # get batch of wav files
-    files_batch = [wav_files[x: x+ls]
-                   for x in range(0, len(wav_files), ls)]
     logger.info('There are {} batch(es) with {} file(s) in each except the last where {} file(s).'.format(
         len(files_batch), ls, len(files_batch[-1])))
 
@@ -99,14 +110,60 @@ def process_zip_file(zip_path: Path, output_dir: Path, logger: logging.Logger, l
         logger.info('{} file(s) processed'.format(count_files))
 
 
+def process_zip_file(zip_path: Path, output_dir: Path, logger: logging.Logger, labels_file_name: str = '', pool_num=10, ls=20):
+    with ZipFile(zip_path) as zip_file:
+        files = zip_file.namelist()
+        wav_files = [file_name for file_name in files if '.wav' in file_name]
+        logger.info('There are {} file(s)'.format(len(wav_files)))
+
+    if not labels_file_name:
+        files_batch = get_files_batch(files=wav_files, ls=ls)
+
+        process_batch_files(zip_path=zip_path, output_dir=output_dir,
+                            logger=logger, files_batch=files_batch, pool_num=pool_num, ls=ls)
+
+    else:
+        files_0, files_1 = get_labeld_files(zip_path=zip_file, file_name=labels_file_name,
+                                            parent_path="train/", stem='.wav')
+
+        files_batch_0 = get_files_batch(files=files_0, ls=ls)
+        process_batch_files(zip_path=zip_path, output_dir=output_dir / "0",
+                            logger=logger, files_batch=files_batch_0, pool_num=pool_num, ls=ls)
+
+        files_batch_1 = get_files_batch(files=files_1, ls=ls)
+        process_batch_files(zip_path=zip_path, output_dir=output_dir / "1",
+                            logger=logger, files_batch=files_batch_1, pool_num=pool_num, ls=ls)
+
+    # p = Pool(pool_num)
+    # count_files = 0
+    # for bi in range(0, len(files_batch), pool_num):
+    #     p.map(partial(process_zip_batch, zip_path=zip_path,
+    #                   output_dir=output_dir), files_batch[bi: bi+pool_num])
+
+    #     count_files += sum([len(batch)
+    #                        for batch in files_batch[bi: bi+pool_num]])
+    #     logger.info('{} file(s) processed'.format(count_files))
+
+
 def process_data_files():
 
     with open('params.yaml') as file:
         params = yaml.safe_load(file)
 
+    num_pool = 2
+
     logger = get_logger("DATA PROCESS", log_level=params['base']['log_level'])
 
     train_zip = Path(params['data']['train_zip'])
+
+    output_dir = Path(params['data']['labels_folder'])
+    file_name = params['data']['zip_label_name']
+
+    make_folder(output_dir)
+    extract_file_from_zip(zip_path=train_zip,
+                          file_name=file_name,
+                          output_dir=output_dir)
+
     test_zip = Path(params['data']['test_zip'])
 
     train_mels_dir = Path(params['data']['train_mels'])
@@ -115,12 +172,14 @@ def process_data_files():
     logger.info('Create train mels directory.')
     make_folder(train_mels_dir)
     logger.info('Start process of {}'.format(train_zip))
-    process_zip_file(train_zip, train_mels_dir, logger=logger)
+    process_zip_file(train_zip, train_mels_dir,
+                     logger=logger, pool_num=num_pool)
 
     logger.info('Create test mels directory.')
     make_folder(test_mels_dir)
     logger.info('Start process of {}'.format(test_zip))
-    process_zip_file(test_zip, test_mels_dir, logger=logger)
+    process_zip_file(test_zip, test_mels_dir,
+                     logger=logger, pool_num=num_pool)
 
     # DEBUG
     # zip_path = Path('./data/train_test.zip')

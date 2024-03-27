@@ -34,4 +34,3 @@ def extract_zip(params):
 if __name__ == '__main__':
     params = load_params()
     load_zip_data(params)
-    extract_zip(params)
