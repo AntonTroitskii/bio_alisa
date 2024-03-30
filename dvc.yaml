@@ -1,0 +1,13 @@
+stages:
+  data_load:
+    cmd: python src/stages/data_load.py
+    deps: 
+    - src/stages/data_load.py
+  data_transform:
+    cmd: python src/stages/data_process.py
+    deps:
+      - src/stages/data_process.py
+    outs:
+      - data/prepared
+    
+
