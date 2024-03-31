@@ -23,6 +23,7 @@ torchvision = {version = "*", index = "pytorch"}
 torchaudio = {version = "*", index = "pytorch"}
 torchinfo = "*"
 dvc-gdrive = "*"
+colorama = "*"
 
 [dev-packages]
 
