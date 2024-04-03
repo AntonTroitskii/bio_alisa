@@ -10,7 +10,8 @@ import librosa
 import zipfile
 from pathlib import Path
 from zipfile import ZipFile
-from src.utils.files import make_folder, extract_file_from_zip
+from src.utils.files import extract_file_from_zip
+from mllib.utils.io import make_folder
 from mllib.utils.logs import get_logger
 import logging
 import sys

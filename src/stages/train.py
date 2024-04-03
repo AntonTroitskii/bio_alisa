@@ -1,10 +1,12 @@
 from torchvision import transforms, datasets
 
-from src.utils.files import save_data_as_pkl, make_folder, save_dict_as_cvs
+from mllib.utils.pkl import save_data_as_pkl
+from mllib.utils.io import make_folder
+from mllib.pytorch.files import save_results_as_csv
 from pathlib import Path
 from torch.utils.data import DataLoader
 from torch import nn
-from src.utils.files import load_params
+from mllib.utils.dvc import load_params
 from torch.utils.data import Subset
 import torch
 from torch.utils.data import random_split
@@ -72,7 +74,7 @@ def train_model():
     save_data_as_pkl(model, model_path)
 
     make_folder(resluts_path_csv.parent)
-    save_dict_as_cvs(results=results, file_path=resluts_path_csv)
+    save_results_as_csv(results=results, file_path=resluts_path_csv)
     save_plot_results(results=results, file_path=resluts_path_png)
 
     return results
