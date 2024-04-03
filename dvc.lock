@@ -5,15 +5,15 @@ stages:
     deps:
     - path: src/stages/data_load.py
       hash: md5
-      md5: a9deabfff1d6b7c937f4a8df1be0641e
-      size: 1213
+      md5: 5ab50ed6f0953f924329832ad23d47d5
+      size: 1240
   data_transform:
     cmd: python src/stages/data_process.py
     deps:
     - path: src/stages/data_process.py
       hash: md5
-      md5: 28b38986a4a38e63dd044106197421c6
-      size: 6741
+      md5: caec69ee709ceaae7f0b985e7d3e4ded
+      size: 6558
     outs:
     - path: data/prepared
       hash: md5
@@ -37,3 +37,5 @@ stages:
       hash: md5
       md5: fb15ab6e61f5b864ab2acb28b38ebdb7
       size: 46844654
+  debug:
+    cmd: python src/stages/python.py

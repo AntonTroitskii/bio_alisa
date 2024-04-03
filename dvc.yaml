@@ -1,4 +1,6 @@
 stages:
+  debug:
+    cmd: python src/stages/python.py
   data_load:
     cmd: python src/stages/data_load.py
     deps: 
