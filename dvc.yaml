@@ -18,6 +18,8 @@ stages:
       - src/stages/train.py
     outs:
       - models/model.pkl
+      - results/results.csv
+      - results/results.png
   # plots:
   #   - results/results.csv
 plots:
