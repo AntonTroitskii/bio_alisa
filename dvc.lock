@@ -5,8 +5,8 @@ stages:
     deps:
     - path: src/stages/data_load.py
       hash: md5
-      md5: 5ab50ed6f0953f924329832ad23d47d5
-      size: 1240
+      md5: d966103a6acca99837ff2fca2923c493
+      size: 1199
   data_transform:
     cmd: python src/stages/data_process.py
     deps:
@@ -30,12 +30,12 @@ stages:
       nfiles: 17349
     - path: src/stages/train.py
       hash: md5
-      md5: 6c06db81ebdf5927702216d896d39a33
-      size: 3069
+      md5: 79f6766132c8e9c1f4d596cedfac8717
+      size: 3293
     outs:
     - path: models/model.pkl
       hash: md5
-      md5: fb15ab6e61f5b864ab2acb28b38ebdb7
+      md5: c7e694ee6d982ab0e6ec6dd372af15ed
       size: 46844654
   debug:
     cmd: python src/stages/python.py

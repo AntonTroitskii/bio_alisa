@@ -1,3 +1,4 @@
+import os
 from torchvision import transforms, datasets
 
 from mllib.utils.pkl import save_data_as_pkl
@@ -13,15 +14,15 @@ from torch.utils.data import random_split
 from mllib.pytorch.train import train
 from src.train.models import get_torch_model
 from mllib.pytorch.plot import save_plot_results
+from mllib.utils.logs import get_logger
 
 
 def train_model():
-
     params = load_params()
+    logger = get_logger("TRAIN", log_level=params['base']['log_level'])
 
-    train_path = params['data']['train_mels']
-    test_path = params['data']['test_mels']
-    model_path = params['train']['model']
+    train_path = Path(params['data']['train_mels'])
+    model_path = Path(params['train']['model'])
     n_images = params['train']['number_images']
 
     resluts_path_csv = Path(params['results']['train_results_csv'])
@@ -37,14 +38,15 @@ def train_model():
 
     if n_images:
         train_dataset = Subset(train_dataset, torch.arange(0, n_images))
+        logger.info('Number images to process {}'.format(n_images))
 
     # Split data
 
     train_data, test_data = random_split(train_dataset, lengths=[
                                          0.8, 0.2], generator=torch.Generator().manual_seed(params['base']['seed']))
 
-    print(len(train_data), len(test_data))
-    print(train_data, test_data)
+    logger.info('Train data size {}, test data size {}'.format(
+        len(train_data), len(test_data)))
 
     # Create DataLoaders
     train_dataloader = DataLoader(
@@ -64,13 +66,16 @@ def train_model():
 
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
+    logger.info('TRAIN STARTS ...')
     results = train(model=model,
                     train_dataloader=train_dataloader,
                     test_dataloader=test_dataloader,
                     epochs=epochs, loss_fn=loss_fn,
                     optimizer=optimizer, device=device)
+    logger.info('TRAIN COMPLEATES.')
 
-    make_folder(Path(model_path).parent)
+    logger.info('Current directory {}'.format(os.getcwd()))
+    make_folder(model_path.parent)
     save_data_as_pkl(model, model_path)
 
     make_folder(resluts_path_csv.parent)
