@@ -20,3 +20,20 @@ stages:
       md5: 0eb36583b1828415d77e844c4e568efe.dir
       size: 429822574
       nfiles: 17349
+  train:
+    cmd: python src/stages/train.py
+    deps:
+    - path: data/prepared
+      hash: md5
+      md5: 0eb36583b1828415d77e844c4e568efe.dir
+      size: 429822574
+      nfiles: 17349
+    - path: src/stages/train.py
+      hash: md5
+      md5: 6a696cc05c16de662f59ffc22bd59d4b
+      size: 2996
+    outs:
+    - path: models/model.pkl
+      hash: md5
+      md5: 165d7304e59f2d2f07980be8623e3cda
+      size: 46844654

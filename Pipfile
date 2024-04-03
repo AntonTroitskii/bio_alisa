@@ -22,8 +22,8 @@ torch = {version = "*", index = "pytorch"}
 torchvision = {version = "*", index = "pytorch"}
 torchaudio = {version = "*", index = "pytorch"}
 torchinfo = "*"
-dvc-gdrive = "*"
 colorama = "*"
+pandas = "*"
 
 [dev-packages]
 

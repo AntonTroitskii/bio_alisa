@@ -9,5 +9,33 @@ stages:
       - src/stages/data_process.py
     outs:
       - data/prepared
-    
-
+  train:
+    cmd: python src/stages/train.py
+    deps:
+      - data/prepared
+      - src/stages/train.py
+    outs:
+      - models/model.pkl
+  # plots:
+  #   - results/results.csv
+plots:
+  - epoch vs loss:
+      template: linear
+      x: epoch
+      y:
+        results\results.csv:
+          - train_loss
+          - test_loss
+      x_label: epoch
+      y_label: loss
+  - epoch vs accuracy:
+      template: linear
+      x: epoch
+      y:
+        results\results.csv:
+          - train_acc
+          - test_acc
+      x_label: epoch
+      y_label: accuracy
+      
+  - results\results.png

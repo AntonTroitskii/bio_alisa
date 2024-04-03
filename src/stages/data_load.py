@@ -1,5 +1,6 @@
-from src.utils.net import download_yandex_file
-from src.utils.files import load_params, extract_zip_in_foler, make_folder
+from mllib.utils.net import download_yandex_file
+from mllib.utils.dvc import load_params
+from mllib.utils.io import make_folder
 from pathlib import Path
 # import asyncio
 

@@ -36,8 +36,16 @@ data:
   if_all_images: false
 
 train:
-  fine_tune_step: 10
-  nn: resnet18
+  number_images: 10
+  nn_type:
+  nn: resnet18 #[resnet18, resnet34, resnet50, resnet101, resnet152]
+  weights: DEFAULT # IMAGENET1K_V1
+  epochs: 15
+  lr: 0.00001
   # nn: [resnet18, resnet34, resnet50, resnet101, resnet152]
   # nn: [resnet18, resnet34, resnet50]
   model: models/model.pkl
+results:
+  train_results_csv: results/results.csv
+  train_results_png: results/results.png
+
