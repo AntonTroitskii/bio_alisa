@@ -24,6 +24,7 @@ torchaudio = {version = "*", index = "pytorch"}
 torchinfo = "*"
 colorama = "*"
 pandas = "*"
+dvc-s3 = "*"
 
 [dev-packages]
 

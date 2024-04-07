@@ -7,14 +7,13 @@ data:
   train_link: "https://disk.yandex.ru/d/IUUTPJFOfwn_OQ"
   test_link: "https://disk.yandex.ru/d/K8Z-gQbspmxkhw"
   # train.zip -> ttrain_mels
-  
+
   # ZIP
   zip_folder: "data/zip"
   train_zip: "data/zip/train.zip"
   test_zip: "data/zip/test.zip"
   zip_label_name: "train/targets.tsv"
 
-  
   # UNPACKED
   labels_folder: "data/labels"
   train_target: "data/labels/targets.tsv"
@@ -24,28 +23,25 @@ data:
   # unzip_dir: "data/unzip"
   # train_dir: "data/unzip/train/"
   # test_dir: "data/unzip/test"
-  
+
   # MELS
   train_mels: "data/prepared/train_mels"
   test_mels: "data/prepared/test_mels"
-  
+
   # Data preparation
-  size: 100
+  size: 50
   valid_pct: 0.2
   shuffle_data: True
   if_all_images: false
 
 train:
-  number_images: 10
+  number_images:
   nn_type:
   nn: resnet18 #[resnet18, resnet34, resnet50, resnet101, resnet152]
   weights: DEFAULT # IMAGENET1K_V1
-  epochs: 7
-  lr: 0.00001
-  # nn: [resnet18, resnet34, resnet50, resnet101, resnet152]
-  # nn: [resnet18, resnet34, resnet50]
+  epochs: 15
+  lr: 0.001
   model: models/model.pkl
 results:
   train_results_csv: results/results.csv
   train_results_png: results/results.png
-
