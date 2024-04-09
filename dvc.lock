@@ -25,26 +25,26 @@ stages:
     deps:
     - path: src/stages/train.py
       hash: md5
-      md5: 79f6766132c8e9c1f4d596cedfac8717
-      size: 3293
+      md5: 1bc134b3e316eb80e3461adfea2b60d3
+      size: 3174
     params:
       params.yaml:
         train.epochs: 15
-        train.lr: 0.001
+        train.lr: 0.0001
         train.nn: resnet18
         train.number_images: 100
     outs:
     - path: models/model.pkl
       hash: md5
-      md5: 2565ee8b2bbee4c4199c473d3e8dfccf
-      size: 46844654
+      md5: 55b32d2df6ed8d232df9d65f3fe8d20c
+      size: 44796743
     - path: results/results.csv
       hash: md5
-      md5: beac80db650088159816f3584f1250d3
-      size: 869
+      md5: a0447a3bc83e8b637ff9b9ad1299b0ca
+      size: 903
     - path: results/results.png
       hash: md5
-      md5: ae901912ee553e032517e67e7a3a0376
-      size: 27064
+      md5: be1b69e6a54642bf6271171d943d03a1
+      size: 35724
   debug:
     cmd: python src/stages/python.py

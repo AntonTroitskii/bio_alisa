@@ -1,20 +1,19 @@
 import os
-from torchvision import transforms, datasets
-
-from mllib.utils.pkl import save_data_as_pkl
-from mllib.utils.io import make_folder
-from mllib.pytorch.files import save_results_as_csv
 from pathlib import Path
-from torch.utils.data import DataLoader
-from torch import nn
-from mllib.utils.dvc import load_params
-from torch.utils.data import Subset
+
 import torch
-from torch.utils.data import random_split
-from mllib.pytorch.train import train
-from src.train.models import get_torch_model
+from torch import nn
+from torch.utils.data import DataLoader, Subset, random_split
+from torchvision import datasets
+
+from mllib.pytorch.files import save_results_as_csv
 from mllib.pytorch.plot import save_plot_results
+from mllib.pytorch.train import train
+from mllib.utils.dvc import load_params
+from mllib.utils.io import make_folder
 from mllib.utils.logs import get_logger
+from mllib.utils.pkl import save_data_as_pkl
+from src.train.models import get_simple_image_transform, get_torch_model
 
 
 def train_model():
@@ -27,10 +26,9 @@ def train_model():
 
     resluts_path_csv = Path(params['results']['train_results_csv'])
     resluts_path_png = Path(params['results']['train_results_png'])
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
-    image_transform = transforms.Compose(
-        [transforms.Resize(size=(64, 64)), transforms.ToTensor()]
-    )
+    image_transform = get_simple_image_transform()
 
     train_dataset = datasets.ImageFolder(root=train_path,
                                          transform=image_transform,
@@ -54,17 +52,13 @@ def train_model():
     test_dataloader = DataLoader(
         dataset=test_data, batch_size=24, shuffle=12, num_workers=0)
 
-    model_name = params['train']['nn']
-    model_weight = params['train']['weights']
     lr = params['train']['lr']
     epochs = params['train']['epochs']
 
-    model = get_torch_model(model_name=model_name, model_weight=model_weight)
+    model = get_torch_model(params=params, device=device)
 
     loss_fn = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
-
-    device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
     logger.info('TRAIN STARTS ...')
     results = train(model=model,

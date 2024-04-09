@@ -25,6 +25,7 @@ torchinfo = "*"
 colorama = "*"
 pandas = "*"
 dvc-s3 = "*"
+ipython = "*"
 
 [dev-packages]
 

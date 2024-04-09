@@ -1,16 +1,46 @@
 import torch
 from torch import nn
-from torchvision.models import resnet18, resnet34, resnet50, resnet101, resnet152
-
+from torchvision import transforms
+from torchvision.models import (resnet18, resnet34, resnet50, resnet101,
+                                resnet152)
 
 torch_models = {'resnet18': resnet18, 'resnet34': resnet34,
                 'resnet50': resnet50, 'resnet101': resnet101, 'resnet152': resnet152}
 
+resnet_cl_input_shape = {'resnet18': 512, 'resnet34': resnet34,
+                         'resnet50': resnet50, 'resnet101': resnet101, 'resnet152': resnet152}
 
-def get_torch_model(model_name: str, model_weight: str):
 
-    if model_name in torch_models.keys():
-        model = torch_models[model_name](weights=model_weight)
+def get_fine_tune_model(params, model):
+
+    model_name = params['train']['nn']
+    num_classes = params['base']['num_classes']
+
+    # Freeze all base layers in the "features" section of the model (the feature extractor) by setting requires_grad=False
+    for param in model.parameters():
+        param.requires_grad = False
+
+    if 'resnet' in model_name:
+        model.fc = torch.nn.Linear(in_features=model.fc.in_features,
+                                   out_features=num_classes)
+    return model
+
+
+def get_torch_model(params, device):
+
+    model_name = params['train']['nn']
+    model_weight = params['train']['weights']
+
+    if model_name in torch_models:
+        model = torch_models[model_name](
+            weights=model_weight).to(device=device)
+        if params['train']['fine_tune']:
+            model = get_fine_tune_model(params=params, model=model)
+    else:
+        print("There is no such model")
+
+        # Recreate the classifier layer and seed it to the target devic
+
     return model
 
 
@@ -67,3 +97,9 @@ def create_tinyvgg():
     tinyVGG = TinyVGG()
 
     return tinyVGG
+
+
+def get_simple_image_transform():
+    return transforms.Compose(
+        [transforms.Resize(size=(64, 64)), transforms.ToTensor()]
+    )
