@@ -17,7 +17,7 @@ mpegcoder = "*"
 librosa = "*"
 matplotlib = "*"
 pyyaml = "*"
-dvc = "*"
+dvc = "==3.47"
 torch = {version = "*", index = "pytorch"}
 torchvision = {version = "*", index = "pytorch"}
 torchaudio = {version = "*", index = "pytorch"}
@@ -26,6 +26,7 @@ colorama = "*"
 pandas = "*"
 dvc-s3 = "*"
 ipython = "*"
+dvclive = "*"
 
 [dev-packages]
 
