@@ -36,7 +36,7 @@ data:
   if_all_images: false
 
 train:
-  number_images:
+  number_images: 100
   nn_type:
   nn: resnet18 #[resnet18, resnet34, resnet50, resnet101, resnet152]
   weights: DEFAULT # IMAGENET1K_V1

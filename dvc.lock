@@ -36,15 +36,15 @@ stages:
     outs:
     - path: models/model.pkl
       hash: md5
-      md5: 55b32d2df6ed8d232df9d65f3fe8d20c
+      md5: 7b7cb842fdb2523dcf25a1b7be63aa00
       size: 44796743
     - path: results/results.csv
       hash: md5
-      md5: a0447a3bc83e8b637ff9b9ad1299b0ca
-      size: 903
+      md5: b2c1d818379219cd4efe838920acc160
+      size: 910
     - path: results/results.png
       hash: md5
-      md5: be1b69e6a54642bf6271171d943d03a1
-      size: 35724
+      md5: 6cd40e863f25a66c27807ef45b2c62c7
+      size: 36343
   debug:
     cmd: python src/stages/python.py
