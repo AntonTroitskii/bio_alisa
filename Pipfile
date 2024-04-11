@@ -27,6 +27,7 @@ pandas = "*"
 dvc-s3 = "*"
 ipython = "*"
 dvclive = "*"
+dagshub = "*"
 
 [dev-packages]
 
