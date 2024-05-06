@@ -1,0 +1,20 @@
+{
+    "markdown.preview.fontSize": 10,
+    "notebook.markup.fontSize": 14,
+    "editor.fontSize": 14,
+    "jupyter.notebookFileRoot": "${workspaceFolder}",
+    "python.terminal.activateEnvironment": false,
+    "terminal.integrated.env.windows": {
+        // "PYTHONPATH": "${workspaceFolder};${workspaceFolder}/../../../data_libs/anton_ml"
+        "PYTHONPATH": "${workspaceFolder};"
+    },
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "explicit"
+    }
+    // "python.analysis.extraPaths": [
+    //     "./../../../data_libs/anton_ml"
+    // ],
+    // "python.autoComplete.extraPaths": [
+    //     "./../../../data_libs/anton_ml"
+    // ]
+}

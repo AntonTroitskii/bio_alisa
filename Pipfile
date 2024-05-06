@@ -18,7 +18,7 @@ librosa = "*"
 matplotlib = "*"
 pyyaml = "*"
 dvc = "==3.47"
-torch = {version = "*", index = "pytorch"}
+torch = {version = "==2.2.2", index = "pytorch"}
 torchvision = {version = "*", index = "pytorch"}
 torchaudio = {version = "*", index = "pytorch"}
 torchinfo = "*"
@@ -32,4 +32,6 @@ dagshub = "*"
 [dev-packages]
 
 [requires]
-python_version = "3.9"
+python_version = "3.10"
+python_full_version = "3.10.5"
+

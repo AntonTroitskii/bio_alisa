@@ -5,12 +5,15 @@ stages:
     cmd: python src/stages/data_load.py
     deps:
       - src/stages/data_load.py
-  data_transform:
+  data_process:
     cmd: python src/stages/data_process.py
     deps:
       - src/stages/data_process.py
+      - src/utils/data_process.py
     outs:
-      - data/prepared
+      - data/processed/:
+          cache: false
+
   train:
     cmd: python src/stages/train.py
     params:

@@ -5,46 +5,48 @@ stages:
     deps:
     - path: src/stages/data_load.py
       hash: md5
-      md5: d966103a6acca99837ff2fca2923c493
-      size: 1199
-  data_transform:
+      md5: 5ab50ed6f0953f924329832ad23d47d5
+      size: 1240
+  data_process:
     cmd: python src/stages/data_process.py
     deps:
     - path: src/stages/data_process.py
       hash: md5
-      md5: caec69ee709ceaae7f0b985e7d3e4ded
-      size: 6558
-    outs:
-    - path: data/prepared
+      md5: cc1a92f1c28ebbbb69379314de34fdb1
+      size: 7451
+    - path: src/utils/data_process.py
       hash: md5
-      md5: 0eb36583b1828415d77e844c4e568efe.dir
-      size: 429822574
-      nfiles: 17349
+      md5: b11a23d788139b740799f562804aa245
+      size: 1830
+    outs:
+    - path: data/processed/
+      hash: md5
+      md5: 7e7042a8310f124b27e3c47f7e16743b.dir
+      size: 343732014
+      nfiles: 17351
   train:
     cmd: python src/stages/train.py
     deps:
     - path: src/stages/train.py
       hash: md5
-      md5: 1bc134b3e316eb80e3461adfea2b60d3
-      size: 3174
+      md5: 7a0921b41759e980f5cfdbfcbf8b7e49
+      size: 3286
     params:
       params.yaml:
-        train.epochs: 15
-        train.lr: 0.0001
+        train.epochs: 10
+        train.lr: 0.001
         train.nn: resnet18
-        train.number_images: 100
+        train.number_images:
     outs:
     - path: models/model.pkl
       hash: md5
-      md5: 7b7cb842fdb2523dcf25a1b7be63aa00
+      md5: e8d5bcf61234dea284fd900aa2785cfe
       size: 44796743
     - path: results/results.csv
       hash: md5
-      md5: b2c1d818379219cd4efe838920acc160
-      size: 910
+      md5: 7b6b2cbab0cfc0b4ceaba894ea95db66
+      size: 828
     - path: results/results.png
       hash: md5
-      md5: 6cd40e863f25a66c27807ef45b2c62c7
-      size: 36343
-  debug:
-    cmd: python src/stages/python.py
+      md5: 57819ca555ab7f268218bbb71cd1583d
+      size: 53989
