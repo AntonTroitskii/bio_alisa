@@ -2,52 +2,78 @@ schema: '2.0'
 stages:
   data_load:
     cmd: python src/stages/data_load.py
-    deps:
-    - path: src/stages/data_load.py
+    outs:
+    - path: data/zip
       hash: md5
-      md5: 5ab50ed6f0953f924329832ad23d47d5
-      size: 1240
+      md5: 25a0cdf0b4038a807b421eb2b9803fe1.dir
+      size: 1478252441
+      nfiles: 2
   data_process:
     cmd: python src/stages/data_process.py
     deps:
     - path: src/stages/data_process.py
       hash: md5
-      md5: cc1a92f1c28ebbbb69379314de34fdb1
-      size: 7451
+      md5: f96c175867d87fec9ff1d43205ee9406
+      size: 7222
     - path: src/utils/data_process.py
       hash: md5
-      md5: b11a23d788139b740799f562804aa245
-      size: 1830
+      md5: 15e4101929009fc4ce46a4adfaf2cba3
+      size: 1767
     outs:
-    - path: data/processed/
+    - path: data/processed/test_processed.zip
       hash: md5
-      md5: 7e7042a8310f124b27e3c47f7e16743b.dir
-      size: 343732014
-      nfiles: 17351
+      md5: b04bfe295f16093852afd116252679dd
+      size: 34051814
+    - path: data/processed/train_processed.zip
+      hash: md5
+      md5: ce3e76be269aab0532b39a50c3d7f587
+      size: 139372212
   train:
     cmd: python src/stages/train.py
     deps:
     - path: src/stages/train.py
       hash: md5
-      md5: 7a0921b41759e980f5cfdbfcbf8b7e49
-      size: 3286
+      md5: f61e591e8f2b0b46e0689186bedfa996
+      size: 3188
     params:
       params.yaml:
         train.epochs: 5
         train.fine_tune: false
-        train.lr: 0.0001
+        train.lr: 5e-05
         train.nn: resnet34
-        train.number_images: 1000
+        train.number_images: 100
     outs:
     - path: models/model.pkl
       hash: md5
-      md5: ac625df267ce712679f05faf4e2a9da6
+      md5: a422918e5168c00c8dee0f2d2207a7dd
       size: 87343348
     - path: results/results.csv
       hash: md5
-      md5: 825a3f7fbc1e9f0cb180f34851a8b011
-      size: 446
+      md5: ef6750c2177e0e38e00e0af5eec4c18b
+      size: 332
     - path: results/results.png
       hash: md5
-      md5: cfc91f8996c307f49c78661c5d7cd668
-      size: 34752
+      md5: b8383f2e4ad65fa2ca0709eba6f12d96
+      size: 36295
+  unpack:
+    cmd: python src/stages/data_unpack.py
+    deps:
+    - path: data/processed/test_processed.zip
+      hash: md5
+      md5: b04bfe295f16093852afd116252679dd
+      size: 34051814
+    - path: data/processed/train_processed.zip
+      hash: md5
+      md5: ce3e76be269aab0532b39a50c3d7f587
+      size: 139372212
+    outs:
+    - path: data/processed/test_processed
+      hash: md5
+      md5: 5e44275b5e35b99166bc82f37e6c4188.dir
+      size: 33444278
+      nfiles: 3413
+    - path: data/processed/train_processed
+      hash: md5
+      md5: abe9ae501957ac7b42ba64cd551bd863.dir
+      size: 136863710
+      nfiles: 13936

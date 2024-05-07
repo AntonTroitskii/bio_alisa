@@ -3,17 +3,26 @@ stages:
   #   cmd: python src/stages/python.py
   data_load:
     cmd: python src/stages/data_load.py
-    deps:
-      - src/stages/data_load.py
+    outs:
+      - data/zip
   data_process:
     cmd: python src/stages/data_process.py
     deps:
       - src/stages/data_process.py
       - src/utils/data_process.py
     outs:
-      - data/processed/:
+      - data/processed/train_processed.zip
+      - data/processed/test_processed.zip
+  unpack:
+    cmd: python src/stages/data_unpack.py
+    deps:
+      - data/processed/train_processed.zip
+      - data/processed/test_processed.zip
+    outs:
+      - data/processed/train_processed:
           cache: false
-
+      - data/processed/test_processed:
+          cache: false
   train:
     cmd: python src/stages/train.py
     params:
