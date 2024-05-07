@@ -29,13 +29,13 @@ data:
   train_col_label: "label"
 
 train:
-  number_images:
+  number_images: 1000
   nn_type:
-  nn: resnet18 #[resnet18, resnet34, resnet50, resnet101, resnet152]
-  weights: IMAGENET1K_V1 # IMAGENET1K_V1, DEFAULT
-  epochs: 10
-  lr: 0.001
-  fine_tune: true
+  nn: resnet34 #[resnet18, resnet34, resnet50, resnet101, resnet152]
+  weights: DEFAULT # IMAGENET1K_V1, DEFAULT
+  epochs: 5
+  lr: 0.00005
+  fine_tune: false
 
   model: models/model.pkl
 results:

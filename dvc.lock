@@ -33,20 +33,21 @@ stages:
       size: 3286
     params:
       params.yaml:
-        train.epochs: 10
-        train.lr: 0.001
-        train.nn: resnet18
-        train.number_images:
+        train.epochs: 5
+        train.fine_tune: false
+        train.lr: 0.0001
+        train.nn: resnet34
+        train.number_images: 1000
     outs:
     - path: models/model.pkl
       hash: md5
-      md5: e8d5bcf61234dea284fd900aa2785cfe
-      size: 44796743
+      md5: ac625df267ce712679f05faf4e2a9da6
+      size: 87343348
     - path: results/results.csv
       hash: md5
-      md5: 7b6b2cbab0cfc0b4ceaba894ea95db66
-      size: 828
+      md5: 825a3f7fbc1e9f0cb180f34851a8b011
+      size: 446
     - path: results/results.png
       hash: md5
-      md5: 57819ca555ab7f268218bbb71cd1583d
-      size: 53989
+      md5: cfc91f8996c307f49c78661c5d7cd668
+      size: 34752

@@ -21,6 +21,7 @@ stages:
       - train.nn
       - train.epochs
       - train.lr
+      - train.fine_tune
     deps:
       # - data/prepared
       - src/stages/train.py
