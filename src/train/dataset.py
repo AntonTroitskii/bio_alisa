@@ -3,7 +3,9 @@ from typing import Tuple
 
 import torch
 from PIL import Image
-from torch.utils.data import Dataset, random_split
+from torch.utils.data import DataLoader, Dataset, Subset, random_split
+
+from src.train.models import get_grscl_transfrom
 
 
 class MelDataset(Dataset):
@@ -41,3 +43,40 @@ class MelDataset(Dataset):
 def split_train_val_test(dataset: list, fraction=[0.7, 0.2, 0.1], seed=42):
     generator = torch.Generator().manual_seed(seed)
     return random_split(dataset, fraction, generator=generator)
+
+
+def get_data_loaders(seed, logger, train_path, n_images, label_dict):
+    image_transform = get_grscl_transfrom()
+    train_dataset = MelDataset(
+        target_dir=train_path, labels_dict=label_dict, transform=image_transform
+    )
+    # size dimension is not how it is expected
+    if n_images:
+        train_dataset = Subset(train_dataset, torch.arange(0, n_images))
+        logger.info("Number images to process %d", n_images)
+
+    # Split data
+    train_data, val_data, test_data = split_train_val_test(
+        dataset=train_dataset, seed=seed
+    )
+
+    logger.info(
+        "Train data size %d, val data size %d, test data size %d",
+        len(train_data),
+        len(val_data),
+        len(test_data),
+    )
+
+    # Create DataLoaders
+    train_dataloader = DataLoader(
+        dataset=train_data, batch_size=24, shuffle=True, num_workers=0
+    )
+    val_dataloader = DataLoader(
+        dataset=val_data, batch_size=24, shuffle=12, num_workers=0
+    )
+
+    test_dataloader = DataLoader(
+        dataset=test_data, batch_size=24, shuffle=12, num_workers=0
+    )
+
+    return train_dataloader, val_dataloader, test_dataloader

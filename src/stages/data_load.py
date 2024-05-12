@@ -1,24 +1,23 @@
 from pathlib import Path
-from mllib.utils.io import make_folder
-from mllib.utils.dvc import load_params
-from mllib.utils.net import download_yandex_file
-import sys
-import os
 
+from mllib.utils.dvc import load_params
+from mllib.utils.io import make_folder
+from mllib.utils.net import download_yandex_file
 
 # import asyncio
 
 
-def load_zip_data(params):
+def load_zip_data():
     """
     Downloading three large files simultaneously.
     Each file has its own progress bar.
     """
     # loop = asyncio.get_running_loop()
-    make_folder(Path((params['data']['zip_folder'])))
+    params = load_params()
+    make_folder(Path((params["data"]["zip_folder"])))
     urls = [
-        (params['data']['train_link'], params['data']['train_zip']),
-        (params['data']['test_link'], params['data']['test_zip'])
+        (params["data"]["train_link"], params["data"]["train_zip"]),
+        (params["data"]["test_link"], params["data"]["test_zip"]),
     ]
     # tasks = [loop.create_task(download_yandex_file(url, file_path))
     #          for url, file_path in urls]
@@ -29,13 +28,12 @@ def load_zip_data(params):
 
 
 def extract_zip(params):
-    make_folder(Path(params['data']['unzip_dir']))
+    make_folder(Path(params["data"]["unzip_dir"]))
     # extract_zip_in_foler(params['data']['train_zip'],
     #                      params['data']['unzip_dir'])
     # extract_zip_in_foler(params['data']['test_zip'],
     #                      params['data']['unzip_dir'])
 
 
-if __name__ == '__main__':
-    params = load_params()
-    load_zip_data(params)
+if __name__ == "__main__":
+    load_zip_data()

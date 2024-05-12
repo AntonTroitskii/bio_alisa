@@ -33,28 +33,32 @@ stages:
     deps:
     - path: src/stages/train.py
       hash: md5
-      md5: f61e591e8f2b0b46e0689186bedfa996
-      size: 3188
+      md5: f15923d5542645900fae6317c1039711
+      size: 2408
+    - path: src/train/models.py
+      hash: md5
+      md5: 03c9ed9ac5c3cdc6ae8783bdfde9c2af
+      size: 3855
     params:
       params.yaml:
-        train.epochs: 5
+        train.epochs: 15
         train.fine_tune: false
-        train.lr: 5e-05
-        train.nn: resnet34
+        train.lr: 1e-05
+        train.nn: resnet18
         train.number_images: 100
     outs:
     - path: models/model.pkl
       hash: md5
-      md5: a422918e5168c00c8dee0f2d2207a7dd
-      size: 87343348
+      md5: 51bab4419c280f398020925de1faf405
+      size: 44796743
     - path: results/results.csv
       hash: md5
-      md5: ef6750c2177e0e38e00e0af5eec4c18b
-      size: 332
+      md5: 007f8a3788633216b96e3ec77b9023cd
+      size: 901
     - path: results/results.png
       hash: md5
-      md5: b8383f2e4ad65fa2ca0709eba6f12d96
-      size: 36295
+      md5: cf974c72db013e5258fe1cf3b732334b
+      size: 43955
   unpack:
     cmd: python src/stages/data_unpack.py
     deps:
@@ -77,3 +81,35 @@ stages:
       md5: abe9ae501957ac7b42ba64cd551bd863.dir
       size: 136863710
       nfiles: 13936
+  evaluate:
+    cmd: python src/stages/evaluate.py
+    deps:
+    - path: results/results.csv
+      hash: md5
+      md5: 007f8a3788633216b96e3ec77b9023cd
+      size: 901
+    - path: results/results.png
+      hash: md5
+      md5: cf974c72db013e5258fe1cf3b732334b
+      size: 43955
+    outs:
+    - path: results/test_results.json
+      hash: md5
+      md5: c48a3a1ca572a8ca8e5d3aec13e5f10c
+      size: 49
+  predict:
+    cmd: python src/stages/predict.py
+    deps:
+    - path: models/model.pkl
+      hash: md5
+      md5: 51bab4419c280f398020925de1faf405
+      size: 44796743
+    - path: src/stages/predict.py
+      hash: md5
+      md5: 947280d8fc74a48f06af3475a4dbe964
+      size: 1370
+    outs:
+    - path: predict/predict.txt
+      hash: md5
+      md5: 8e1688a2d9982911075c5b5e95708c4d
+      size: 122866

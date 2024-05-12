@@ -34,12 +34,31 @@ stages:
     deps:
       # - data/prepared
       - src/stages/train.py
+      - src/train/models.py
     outs:
       - models/model.pkl
       - results/results.csv:
           cache: false
       - results/results.png:
           cache: false
+  evaluate:
+    cmd: python src/stages/evaluate.py
+    deps:
+      - results/results.csv
+      - results/results.png
+    outs:
+      - results/test_results.json:
+          cache: false
+  predict:
+    cmd: python src/stages/predict.py
+    deps:
+      - models/model.pkl
+      - src/stages/predict.py
+    outs:
+      - predict/predict.txt:
+          cache: false
+metrics:
+  - results/test_results.json
 plots:
   - epoch vs loss:
       template: linear

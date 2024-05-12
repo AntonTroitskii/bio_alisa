@@ -21,20 +21,14 @@ resnet_cl_input_shape = {
 }
 
 
-def get_fine_tune_model(params, model):
-
+def update_classifier_in_model(params, model):
     model_name = params["train"]["nn"]
     num_classes = params["base"]["num_classes"]
-
-    # Freeze all base layers in the "features" section of the model (the feature extractor) by setting requires_grad=False
-    for param in model.parameters():
-        param.requires_grad = False
 
     if "resnet" in model_name:
         model.fc = torch.nn.Linear(
             in_features=model.fc.in_features, out_features=num_classes
         )
-    return model
 
 
 def get_torch_model(params, device):
@@ -45,7 +39,9 @@ def get_torch_model(params, device):
     if model_name in torch_models:
         model = torch_models[model_name](weights=model_weight).to(device=device)
         if params["train"]["fine_tune"]:
-            model = get_fine_tune_model(params=params, model=model)
+            for param in model.parameters():
+                param.requires_grad = False
+        update_classifier_in_model(params=params, model=model)
     else:
         print("There is no such model")
 
