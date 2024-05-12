@@ -10,6 +10,7 @@ stages:
     deps:
       - src/stages/data_process.py
       - src/utils/data_process.py
+      - data/zip/
     outs:
       - data/processed/train_processed.zip
       - data/processed/test_processed.zip
@@ -32,9 +33,10 @@ stages:
       - train.lr
       - train.fine_tune
     deps:
-      # - data/prepared
       - src/stages/train.py
       - src/train/models.py
+      - data/processed/train_processed
+      - data/processed/test_processed
     outs:
       - models/model.pkl
       - results/results.csv:
@@ -52,11 +54,15 @@ stages:
   predict:
     cmd: python src/stages/predict.py
     deps:
-      - models/model.pkl
       - src/stages/predict.py
+      - data/processed/train_processed
+      - data/processed/test_processed
     outs:
       - predict/predict.txt:
           cache: false
+      - results/train_predict_results.csv:
+          cache: false
+      - models/model_predict.pkl
 metrics:
   - results/test_results.json
 plots:

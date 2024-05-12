@@ -11,6 +11,11 @@ stages:
   data_process:
     cmd: python src/stages/data_process.py
     deps:
+    - path: data/zip/
+      hash: md5
+      md5: 25a0cdf0b4038a807b421eb2b9803fe1.dir
+      size: 1478252441
+      nfiles: 2
     - path: src/stages/data_process.py
       hash: md5
       md5: f96c175867d87fec9ff1d43205ee9406
@@ -22,15 +27,25 @@ stages:
     outs:
     - path: data/processed/test_processed.zip
       hash: md5
-      md5: b04bfe295f16093852afd116252679dd
+      md5: 0208a7df6fffdcdb1eaaac528d1c909d
       size: 34051814
     - path: data/processed/train_processed.zip
       hash: md5
-      md5: ce3e76be269aab0532b39a50c3d7f587
+      md5: f2196ee422a27559ae42d9d038c7283d
       size: 139372212
   train:
     cmd: python src/stages/train.py
     deps:
+    - path: data/processed/test_processed
+      hash: md5
+      md5: 5e44275b5e35b99166bc82f37e6c4188.dir
+      size: 33444278
+      nfiles: 3413
+    - path: data/processed/train_processed
+      hash: md5
+      md5: abe9ae501957ac7b42ba64cd551bd863.dir
+      size: 136863710
+      nfiles: 13936
     - path: src/stages/train.py
       hash: md5
       md5: f15923d5542645900fae6317c1039711
@@ -41,7 +56,7 @@ stages:
       size: 3855
     params:
       params.yaml:
-        train.epochs: 15
+        train.epochs: 30
         train.fine_tune: false
         train.lr: 1e-05
         train.nn: resnet18
@@ -49,26 +64,26 @@ stages:
     outs:
     - path: models/model.pkl
       hash: md5
-      md5: 51bab4419c280f398020925de1faf405
+      md5: 5abb8d74f6bbe36d419309dc122db8c6
       size: 44796743
     - path: results/results.csv
       hash: md5
-      md5: 007f8a3788633216b96e3ec77b9023cd
-      size: 901
+      md5: 40d2f88dbdb0bf76ed47c4b10e2f36e8
+      size: 1666
     - path: results/results.png
       hash: md5
-      md5: cf974c72db013e5258fe1cf3b732334b
-      size: 43955
+      md5: f0f4cdf854c8afd4fd3e09e287a001d8
+      size: 38287
   unpack:
     cmd: python src/stages/data_unpack.py
     deps:
     - path: data/processed/test_processed.zip
       hash: md5
-      md5: b04bfe295f16093852afd116252679dd
+      md5: 0208a7df6fffdcdb1eaaac528d1c909d
       size: 34051814
     - path: data/processed/train_processed.zip
       hash: md5
-      md5: ce3e76be269aab0532b39a50c3d7f587
+      md5: f2196ee422a27559ae42d9d038c7283d
       size: 139372212
     outs:
     - path: data/processed/test_processed
@@ -86,30 +101,44 @@ stages:
     deps:
     - path: results/results.csv
       hash: md5
-      md5: 007f8a3788633216b96e3ec77b9023cd
-      size: 901
+      md5: 40d2f88dbdb0bf76ed47c4b10e2f36e8
+      size: 1666
     - path: results/results.png
       hash: md5
-      md5: cf974c72db013e5258fe1cf3b732334b
-      size: 43955
+      md5: f0f4cdf854c8afd4fd3e09e287a001d8
+      size: 38287
     outs:
     - path: results/test_results.json
       hash: md5
-      md5: c48a3a1ca572a8ca8e5d3aec13e5f10c
+      md5: ab77d2914f70c876f0789a03f17afe4e
       size: 49
   predict:
     cmd: python src/stages/predict.py
     deps:
-    - path: models/model.pkl
+    - path: data/processed/test_processed
       hash: md5
-      md5: 51bab4419c280f398020925de1faf405
-      size: 44796743
+      md5: 5e44275b5e35b99166bc82f37e6c4188.dir
+      size: 33444278
+      nfiles: 3413
+    - path: data/processed/train_processed
+      hash: md5
+      md5: abe9ae501957ac7b42ba64cd551bd863.dir
+      size: 136863710
+      nfiles: 13936
     - path: src/stages/predict.py
       hash: md5
-      md5: 947280d8fc74a48f06af3475a4dbe964
-      size: 1370
+      md5: de492da2be6e36efe88a0f31677007f1
+      size: 3280
     outs:
+    - path: models/model_predict.pkl
+      hash: md5
+      md5: 9f574aa2832801461eccaf75a4a85c3d
+      size: 44796743
     - path: predict/predict.txt
       hash: md5
-      md5: 8e1688a2d9982911075c5b5e95708c4d
+      md5: d3873eea3e5de087f1f73773231c443a
       size: 122866
+    - path: results/train_predict_results.csv
+      hash: md5
+      md5: 72eb77800e9518c23e7af7d8fe3bbe10
+      size: 385
