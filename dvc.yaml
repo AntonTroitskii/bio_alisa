@@ -51,18 +51,24 @@ stages:
     outs:
       - results/test_results.json:
           cache: false
+  train_to_predict:
+    cmd: python src/stages/train_to_predict.py
+    deps:
+      - src/stages/train_to_predict.py
+      - data/processed/train_processed
+      - data/processed/test_processed
+    outs:
+      - models/model_predict.pkl
+      - results/train_predict_results.csv:
+          cache: false
   predict:
     cmd: python src/stages/predict.py
     deps:
       - src/stages/predict.py
-      - data/processed/train_processed
-      - data/processed/test_processed
-    outs:
-      - predict/predict.txt:
-          cache: false
-      - results/train_predict_results.csv:
-          cache: false
       - models/model_predict.pkl
+    outs:
+      - predict/predict.csv:
+          cache: false
 metrics:
   - results/test_results.json
 plots:
