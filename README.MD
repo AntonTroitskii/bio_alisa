@@ -28,6 +28,15 @@ id\tgender
 
 Если получен WA, чтобы узнать причину, можно посмотреть отчёт по посылке и увидеть его в выводе постпроцессора. Причиной такого вердикта может быть как неправильный формат вывода, так и недостаточная точность.
 
+# Pipeline
+- преобхоавание *.wav файлов в мелспекторкграммы формата .png (используется паралельное обработка файлов из архива);
+- transfer learning для обучения на спектограммах с помощью pytorch;
+- для контоля состояния dataset использовался DVC.
+
+# Как можно улучишть проект
+- можно выполшнять обаботку .wav файлов без предварительного сохранения данных в виде .png. Как описано тут: Audio Deep Learning Made Simple: Sound Classification,
+        Step-by-Step - [towardsdatascience.com](https://towardsdatascience.com/audio-deep-learning-made-simple-sound-classification-step-by-step-cebc936bbe5)
+
 # Полезное
 
 -   Как решать подобные задачи?
@@ -41,7 +50,7 @@ id\tgender
         [towardsdatascience.com](https://towardsdatascience.com/audio-deep-learning-made-simple-part-2-why-mel-spectrograms-perform-better-aad889a93505)
 
     -   Audio Deep Learning Made Simple: Sound Classification,
-        Step-by-Step - towardsdatascience.com
+        Step-by-Step - [towardsdatascience.com](https://towardsdatascience.com/audio-deep-learning-made-simple-sound-classification-step-by-step-cebc936bbe5)
 
     -   <https://stackoverflow.com/questions/55513652/which-spectrogram-best-represents-features-of-an-audio-file-for-cnn-based-model>
 
